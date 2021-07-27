@@ -1,3 +1,3 @@
-module github.com/anthonygedeon/GBA
+module github.com/anthonygedeon/bmo
 
 go 1.16
