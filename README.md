@@ -1,2 +1,2 @@
-# GBA
-Game Boy Advance Emulator
+## Gameboy
+Game Boy Original Emulator
