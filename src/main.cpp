@@ -1,8 +1,8 @@
-#include  <SDL2/SDL.h>
+#include  <SDL.h>
 #include <stdio.h>
 
 #if !SDL_VERSION_ATLEAST(2,0,17)
-    #error Requires SDL 2.0.17! Aborting!
+#error Requires SDL 2.0.17! Aborting!
 #endif
 
 //Screen dimensions
