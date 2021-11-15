@@ -16,7 +16,7 @@ do
     # Grab the name of the test class and parse the built C filename 
     # with the build path.
     testClassName=$( echo "$testClassFile" | grep -o "^[^.]*" )
-    testClassBuild="$buildDir"/"$testClassName".test.cc
+    testClassBuild="$buildDir"/"$testClassName".test.cpp
 
     echo Building \'"$testClassName"\'...
 

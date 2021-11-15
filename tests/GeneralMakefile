@@ -2,7 +2,7 @@ BUILDDIR=./build
 BINDIR=./build/bin
 
 SRCDIR=../src
-SRCFILES=$(filter-out %main.cc,$(wildcard $(SRCDIR)/*.cc))
+SRCFILES=$(filter-out %main.cpp,$(wildcard $(SRCDIR)/*.cpp))
 
 TESTS=$(wildcard *.test.h)
 PROGS=$(patsubst %.test.h, %, $(TESTS))
@@ -15,7 +15,7 @@ test: compile run
 
 compile: $(PROGS).test
 
-%: $(BUILDDIR)/%.cc 
+%: $(BUILDDIR)/%.cpp
 	g++ -o $(BINDIR)/$@ $(SRCFILES) $< $(BUILDFLAGS)
 
 run:
@@ -28,5 +28,5 @@ run:
 	@echo
 
 clean:
-	rm $(BUILDDIR)/*.test.cc
+	rm $(BUILDDIR)/*.test.cpp
 	rm $(BINDIR)/*.test
