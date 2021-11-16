@@ -5,15 +5,15 @@ SRCDIR=../src
 SRCFILES=$(filter-out %main.cpp,$(wildcard $(SRCDIR)/*.cpp))
 
 TESTS=$(wildcard *.test.h)
-PROGS=$(patsubst %.test.h, %, $(TESTS))
+PROGS=$(patsubst %.h, %, $(TESTS))
 
-BUILDFLAGS=-I../
+BUILDFLAGS=-I../ -g
 
 .PHONY: test compile % run clean 
 
 test: compile run
 
-compile: $(PROGS).test
+compile: $(PROGS)
 
 %: $(BUILDDIR)/%.cpp
 	g++ -o $(BINDIR)/$@ $(SRCFILES) $< $(BUILDFLAGS)
@@ -23,9 +23,9 @@ run:
 	@for test in $(PROGS);		\
 	do							\
 		echo Running $$test;	\
-		$(BINDIR)/$$test.test;	\
+		$(BINDIR)/$$test;		\
+		echo;					\
 	done						
-	@echo
 
 clean:
 	rm $(BUILDDIR)/*.test.cpp
