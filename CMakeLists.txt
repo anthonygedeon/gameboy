@@ -25,10 +25,14 @@ include_directories(
     ${SDL2_INCLUDE_DIR}
     ${CMAKE_SOURCE_DIR}/include/
     ${CMAKE_SOURCE_DIR}/include/imgui/
+    ${CMAKE_SOURCE_DIR}/externals/nfde/src/include/
 )
+
+# add nfde to the project
+add_subdirectory(${CMAKE_SOURCE_DIR}/externals/nfde)
 
 # making the binary that the computer will exec.
 add_executable(bmo ${BMO_SOURCES})
 
 # telling cmake what libs to link against your project
-target_link_libraries(bmo ${SDL2_LIBRARY})
+target_link_libraries(bmo ${SDL2_LIBRARY} nfd)
