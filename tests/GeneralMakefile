@@ -2,20 +2,20 @@ BUILDDIR=./build
 BINDIR=./build/bin
 
 SRCDIR=../src
-SRCFILES=$(filter-out %main.cc,$(wildcard $(SRCDIR)/*.cc))
+SRCFILES=$(filter-out %main.cpp,$(wildcard $(SRCDIR)/*.cpp))
 
 TESTS=$(wildcard *.test.h)
-PROGS=$(patsubst %.test.h, %, $(TESTS))
+PROGS=$(patsubst %.h, %, $(TESTS))
 
-BUILDFLAGS=-I../
+BUILDFLAGS=-I../ -g
 
 .PHONY: test compile % run clean 
 
 test: compile run
 
-compile: $(PROGS).test
+compile: $(PROGS)
 
-%: $(BUILDDIR)/%.cc 
+%: $(BUILDDIR)/%.cpp
 	g++ -o $(BINDIR)/$@ $(SRCFILES) $< $(BUILDFLAGS)
 
 run:
@@ -23,10 +23,10 @@ run:
 	@for test in $(PROGS);		\
 	do							\
 		echo Running $$test;	\
-		$(BINDIR)/$$test.test;	\
+		$(BINDIR)/$$test;		\
+		echo;					\
 	done						
-	@echo
 
 clean:
-	rm $(BUILDDIR)/*.test.cc
+	rm $(BUILDDIR)/*.test.cpp
 	rm $(BINDIR)/*.test
