@@ -1,0 +1,32 @@
+BUILDDIR=./build
+BINDIR=./build/bin
+
+SRCDIR=../src
+SRCFILES=$(filter-out %main.cpp,$(wildcard $(SRCDIR)/*.cpp))
+
+TESTS=$(wildcard *.test.h)
+PROGS=$(patsubst %.h, %, $(TESTS))
+
+BUILDFLAGS=-I../ -g
+
+.PHONY: test compile % run clean 
+
+test: compile run
+
+compile: $(PROGS)
+
+%: $(BUILDDIR)/%.cpp
+	g++ -o $(BINDIR)/$@ $(SRCFILES) $< $(BUILDFLAGS)
+
+run:
+	@echo -e \nRunning tests...
+	@for test in $(PROGS);		\
+	do							\
+		echo Running $$test;	\
+		$(BINDIR)/$$test;		\
+		echo;					\
+	done						
+
+clean:
+	rm $(BUILDDIR)/*.test.cpp
+	rm $(BINDIR)/*.test
