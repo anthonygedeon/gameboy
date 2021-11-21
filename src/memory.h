@@ -7,8 +7,10 @@
 #include <vector>
 
 class Memory {
+private:
     uint16_t m_startAddress;
     std::vector<uint8_t> m_memory;
+
 public:
     Memory(uint16_t startAddress, uint16_t endAddress);
 

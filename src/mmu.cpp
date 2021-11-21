@@ -21,25 +21,33 @@ MMU::MMU()
 uint8_t& MMU::get(uint16_t address) {
     switch(address & 0xF000) {
         // BIOS/ROM
-        case 0x0000: 
+        case 0x0000:
+        case 0x1000:
+        case 0x2000:
+        case 0x3000:
+        case 0x4000:
+        case 0x5000:
+        case 0x6000:
+        case 0x7000:
             if (inBIOS && ((address & 0x0F00) == 0x0000)) {
                 return m_BIOS.get(address);
             }
+            else
+            {
+                return m_ROM.get(address);
+            }
             // Intentional fall-through.
-        // GB ROM
-        case 0x1000: case 0x2000: case 0x3000:
-            return m_ROM.get(address);
-        // Cartridge ROM
-        case 0x4000: case 0x5000: case 0x6000: case 0x7000:
-            return m_ROM.get(address);
         // GPU VRAM
-        case 0x8000: case 0x9000:
+        case 0x8000:
+        case 0x9000:
             return m_VRAM.get(address);
         // Cartridge (External) RAM
-        case 0xA000: case 0xB000:
+        case 0xA000:
+        case 0xB000:
             return m_ERAM.get(address);
         // Working RAM
-        case 0xC000: case 0xD000:
+        case 0xC000:
+        case 0xD000:
             return m_WRAM.get(address);
         // Shadow RAM + sprite attribute mem + IO mem + zero-page RAM
         case 0xF000:
@@ -70,10 +78,21 @@ uint8_t& MMU::get(uint16_t address) {
     return m_ERAM.get(0xA000);
 }
 
-uint8_t MMU::read(uint16_t address) {
+uint8_t MMU::read8(uint16_t address) {
     return get(address);
 }
 
-void MMU::write(uint16_t address, uint8_t data) {
+void MMU::write8(uint16_t address, uint8_t data) {
     get(address) = data;
+}
+
+uint16_t MMU::read16(uint16_t address) {
+    uint8_t high = get(address+1);
+    uint8_t low = get(address);
+    return low | (high << 8);
+}
+
+void MMU::write16(uint16_t address, uint16_t data) {
+    get(address) = data & 0xFF;
+    get(address+1) = data >> 8;
 }
