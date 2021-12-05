@@ -93,6 +93,9 @@ private:
     //      3: Drawing
     uint8_t& STAT;
 
+    // Returns the nth bit in a register, where n is 0-7.
+    uint8_t read1(uint8_t reg, uint8_t bit);
+
     // Make sure default constructor is illegal.
     PPU();
     
