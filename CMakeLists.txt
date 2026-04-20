@@ -34,7 +34,13 @@ FetchContent_Declare(
   GIT_TAG docking
 )
 
-FetchContent_MakeAvailable(glfw glad imgui)
+FetchContent_Declare(
+    catch
+    GIT_REPOSITORY https://github.com/catchorg/Catch2.git
+    GIT_TAG v3.14.0
+)
+
+FetchContent_MakeAvailable(glfw glad imgui catch)
 
 add_library(imgui STATIC
 	${imgui_SOURCE_DIR}/imgui.cpp
@@ -56,4 +62,4 @@ target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/
 add_executable(${CMAKE_PROJECT_NAME} ${SRC_FILES})
 
 find_package(OpenGL REQUIRED)
-target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC imgui glfw OpenGL::GL)
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC imgui Catch2::Catch2WithMain glfw OpenGL::GL)
