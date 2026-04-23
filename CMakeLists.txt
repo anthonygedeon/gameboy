@@ -3,6 +3,7 @@ project(gbemu VERSION 0.0.1
   DESCRIPTION "A gameboy (color) emulator")
 
 file(GLOB_RECURSE SRC_FILES "src/*.cpp")
+file(GLOB TEST_FILES "test/*.cpp")
 
 set(CMAKE_CXX_STANDARD 20)           
 set(CMAKE_CXX_STANDARD_REQUIRED ON)  
@@ -11,8 +12,6 @@ set(CMAKE_COMPILE_WARNING_AS_ERROR ON)
 set(CMAKE_EXPORT_COMPILE_COMMANDS ON)
 
 include(CMakePrintHelpers)
-
-# include(${GLAD_SOURCE_DIR}/cmake/GladConfig.cmake)
 include(FetchContent)
 
 FetchContent_Declare(
@@ -59,7 +58,9 @@ target_link_libraries(imgui PUBLIC glfw glad_opengl_46)
 # executables are made
 target_include_directories(imgui PUBLIC ${imgui_SOURCE_DIR} ${imgui_SOURCE_DIR}/backends)
 
+add_executable(gb_tests ${TEST_FILES})
+target_link_libraries(gb_tests PUBLIC Catch2::Catch2WithMain)
 add_executable(${CMAKE_PROJECT_NAME} ${SRC_FILES})
 
 find_package(OpenGL REQUIRED)
-target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC imgui Catch2::Catch2WithMain glfw OpenGL::GL)
+target_link_libraries(${CMAKE_PROJECT_NAME} PUBLIC imgui glfw OpenGL::GL)
