@@ -3,7 +3,6 @@
 #include <fstream>
 #include <sstream>
 #include <iostream>
-#include <imgui_impl_opengl3.h>
 #include <glad/gl.h>
 
 
@@ -33,7 +32,7 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
         vertexCode   = vShaderStream.str();
         fragmentCode = fShaderStream.str();		
     }
-    catch(std::ifstream::failure e)
+    catch(const std::ifstream::failure& e)
     {
         std::cout << "ERROR::SHADER::FILE_NOT_SUCCESFULLY_READ" << std::endl;
     }
@@ -82,10 +81,15 @@ Shader::Shader(const char* vertexPath, const char* fragmentPath)
         std::cout << "ERROR::SHADER::PROGRAM::LINKING_FAILED\n" << infoLog << std::endl;
     }
     
+    glValidateProgram(ID);
     glDeleteShader(vertex);
     glDeleteShader(fragment);
 }
 
+Shader::~Shader()
+{
+    glDeleteProgram(ID);
+}
 
 void Shader::use() const
 {
