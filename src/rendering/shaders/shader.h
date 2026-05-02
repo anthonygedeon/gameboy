@@ -15,8 +15,6 @@ public:
 
 private:
     unsigned int ID;
-
-    unsigned int compileShader(...);
 };
 
 #endif
