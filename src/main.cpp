@@ -5,6 +5,7 @@
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
 #include <glad/gl.h>
+#include "./rendering/shaders/shader.h"
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -105,6 +106,10 @@ int main(int argc, char** argv)
     glfwSwapInterval(1); 
 
     if (!gladLoadGL(glfwGetProcAddress)) return 1;
+
+    {
+        Shader shader("src/rendering/shaders/vertex.glsl", "src/rendering/shaders/fragment.glsl");
+    }
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
