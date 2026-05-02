@@ -6,7 +6,7 @@
 
 class Shader {
 public:
-    Shader(const char* vertexPath, const char* fragmentPath);
+    Shader(std::string_view vertexPath, std::string_view fragmentPath);
     ~Shader();
 
     void use() const;
@@ -16,7 +16,7 @@ public:
     void setFloat(const std::string &name, float value) const;
 
 private:
-    unsigned int ID;
+    unsigned int m_id;
 };
 
 #endif
