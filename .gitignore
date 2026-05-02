@@ -1,6 +1,7 @@
 /roms
 /build
 imgui.ini
+.cache
 
 # Added by cargo
 
