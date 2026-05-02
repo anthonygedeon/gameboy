@@ -1,5 +1,8 @@
 /roms
 /build
+imgui.ini
+.cache
+.vscode
 
 # Added by cargo
 

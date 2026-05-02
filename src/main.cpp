@@ -1,10 +1,11 @@
 #include <array>
 #include <cstdint>
-#include <iostream>
 #include "imgui.h"
 #include "imgui_impl_glfw.h"
 #include "imgui_impl_opengl3.h"
 #include <stdio.h>
+#include <glad/gl.h>
+#include "./include/shader.hpp"
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -103,6 +104,12 @@ int main(int argc, char** argv)
         return 1;
     glfwMakeContextCurrent(window);
     glfwSwapInterval(1); 
+
+    if (!gladLoadGL(glfwGetProcAddress)) return 1;
+
+    {
+        Shader shader("src/assets/shaders/vertex.glsl", "src/assets/shaders/fragment.glsl");
+    }
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
