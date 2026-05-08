@@ -136,8 +136,8 @@ int main(int argc, char** argv)
     io.IniFilename = nullptr;
     EMSCRIPTEN_MAINLOOP_BEGIN
 #else
-    Shader shader("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
-    Texture texture("assets/images/test_img.jpg");
+    Shader* shader = new Shader("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+    Texture* texture = new Texture("assets/images/test_img.jpg");
 
     float vertices[] = {
         // positions          // colors           // texture coords
@@ -151,9 +151,7 @@ int main(int argc, char** argv)
 
     glGenVertexArrays(1, &vao);
     glGenBuffers(1, &vbo);
-
     glBindVertexArray(vao);
-
     glBindBuffer(GL_ARRAY_BUFFER, vbo);
     glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
 
@@ -220,9 +218,9 @@ int main(int argc, char** argv)
         glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
 
-        shader.use();
-        texture.bind(0);
-        shader.setInt("texture_0", 0);
+        shader->use();
+        texture->bind(0);
+        shader->setInt("texture_0", 0);
         glBindVertexArray(vao);
         glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
@@ -233,6 +231,9 @@ int main(int argc, char** argv)
 #ifdef __EMSCRIPTEN__
     EMSCRIPTEN_MAINLOOP_END;
 #endif
+    delete texture;
+    delete shader;
+
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();
