@@ -6,6 +6,7 @@
 #include <stdio.h>
 #include <glad/gl.h>
 #include "../include/shader.hpp"
+#include "../include/texture.hpp"
 #define GL_SILENCE_DEPRECATION
 #if defined(IMGUI_IMPL_OPENGL_ES2)
 #include <GLES2/gl2.h>
@@ -107,9 +108,7 @@ int main(int argc, char** argv)
 
     if (!gladLoadGL(glfwGetProcAddress)) return 1;
 
-    {
-        Shader shader("src/assets/shaders/vertex.glsl", "src/assets/shaders/fragment.glsl");
-    }
+    
 
     IMGUI_CHECKVERSION();
     ImGui::CreateContext();
@@ -137,6 +136,38 @@ int main(int argc, char** argv)
     io.IniFilename = nullptr;
     EMSCRIPTEN_MAINLOOP_BEGIN
 #else
+    Shader shader("assets/shaders/vertex.glsl", "assets/shaders/fragment.glsl");
+    Texture texture("assets/images/test_img.jpg");
+
+    float vertices[] = {
+        // positions          // colors           // texture coords
+        0.5f,  0.5f, 0.0f,    1.0f, 0.0f, 0.0f,   1.0f, 1.0f,   // top right
+        0.5f, -0.5f, 0.0f,    0.0f, 1.0f, 0.0f,   1.0f, 0.0f,   // bottom right
+        -0.5f, -0.5f, 0.0f,   0.0f, 0.0f, 1.0f,   0.0f, 0.0f,   // bottom left
+        -0.5f,  0.5f, 0.0f,   1.0f, 1.0f, 0.0f,   0.0f, 1.0f    // top left 
+    };
+
+    unsigned int vao, vbo;
+
+    glGenVertexArrays(1, &vao);
+    glGenBuffers(1, &vbo);
+
+    glBindVertexArray(vao);
+
+    glBindBuffer(GL_ARRAY_BUFFER, vbo);
+    glBufferData(GL_ARRAY_BUFFER, sizeof(vertices), vertices, GL_STATIC_DRAW);
+
+    glVertexAttribPointer(0, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)0);
+    glEnableVertexAttribArray(0);
+
+    glVertexAttribPointer(1, 3, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(3 * sizeof(float)));
+    glEnableVertexAttribArray(1);
+
+    glVertexAttribPointer(2, 2, GL_FLOAT, GL_FALSE, 8 * sizeof(float), (void*)(6 * sizeof(float)));
+    glEnableVertexAttribArray(2);
+
+    glBindVertexArray(0);
+
     while (!glfwWindowShouldClose(window))
 #endif
     {
@@ -188,6 +219,13 @@ int main(int argc, char** argv)
         glViewport(0, 0, display_w, display_h);
         glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
+
+        shader.use();
+        texture.bind(0);
+        shader.setInt("texture_0", 0);
+        glBindVertexArray(vao);
+        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
+
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
         glfwSwapBuffers(window);
@@ -195,7 +233,6 @@ int main(int argc, char** argv)
 #ifdef __EMSCRIPTEN__
     EMSCRIPTEN_MAINLOOP_END;
 #endif
-
     ImGui_ImplOpenGL3_Shutdown();
     ImGui_ImplGlfw_Shutdown();
     ImGui::DestroyContext();

@@ -9,6 +9,7 @@ public:
     Texture(std::string_view path);
     ~Texture();
 
+    unsigned int getId() const { return m_id; }
     void bind(unsigned int slot = 0) const;
     void unbind() const;
 
