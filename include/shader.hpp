@@ -9,6 +9,7 @@ public:
     Shader(std::string_view vertexPath, std::string_view fragmentPath);
     ~Shader();
 
+    unsigned int getId() const { return m_id; }
     void use() const;
 
     void setBool(const std::string &name, bool value) const;

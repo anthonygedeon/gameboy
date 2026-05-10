@@ -1,4 +1,4 @@
-#include "./include/shader.hpp"
+#include "../include/shader.hpp"
 #include <string>
 #include <fstream>
 #include <sstream>
@@ -93,10 +93,12 @@ Shader::Shader(std::string_view vertexPath, std::string_view fragmentPath)
     glDeleteShader(fragment);
 }
 
+
 Shader::~Shader()
 {
     if (m_id != 0) glDeleteProgram(m_id);
 }
+
 
 void Shader::use() const
 {
