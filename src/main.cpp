@@ -211,18 +211,24 @@ int main(int argc, char** argv)
             ImGui::End();
         }
 
+        ImGui::Begin("Window");
+
+        ImVec2 size = ImVec2((float)texture->getWidth(), (float)texture->getHeight());
+        ImGui::Image(
+            (ImTextureID)(intptr_t)texture->getId(),
+            size,
+            ImVec2(0, 1),
+            ImVec2(1, 0)
+        );
+
+        ImGui::End();
+
         ImGui::Render();
         int display_w, display_h;
         glfwGetFramebufferSize(window, &display_w, &display_h);
         glViewport(0, 0, display_w, display_h);
         glClearColor(clear_color.x * clear_color.w, clear_color.y * clear_color.w, clear_color.z * clear_color.w, clear_color.w);
         glClear(GL_COLOR_BUFFER_BIT);
-
-        shader->use();
-        texture->bind(0);
-        shader->setInt("texture_0", 0);
-        glBindVertexArray(vao);
-        glDrawArrays(GL_TRIANGLE_FAN, 0, 4);
 
         ImGui_ImplOpenGL3_RenderDrawData(ImGui::GetDrawData());
 
