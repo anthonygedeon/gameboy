@@ -10,6 +10,9 @@ public:
     ~Texture();
 
     unsigned int getId() const { return m_id; }
+    int getWidth() const { return m_width; }
+    int getHeight() const { return m_height; }
+    
     void bind(unsigned int slot = 0) const;
     void unbind() const;
 
